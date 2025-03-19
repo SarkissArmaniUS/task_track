@@ -1,8 +1,5 @@
-// controllers/eventController.js
-
 const eventService = require('../services/eventService');
 
-// Додавання події
 const addEvent = async (req, res) => {
   const { name, date, description, importance } = req.body;
 
@@ -19,7 +16,6 @@ const addEvent = async (req, res) => {
   }
 };
 
-// Отримання всіх подій
 const getAllEvents = async (req, res) => {
   try {
     const events = await eventService.getEvents();
@@ -30,7 +26,6 @@ const getAllEvents = async (req, res) => {
   }
 };
 
-// Оновлення події
 const updateEvent = async (req, res) => {
   const { id } = req.params;
   const { name, date, description, importance } = req.body;
@@ -53,7 +48,6 @@ const updateEvent = async (req, res) => {
   }
 };
 
-// Видалення події
 const deleteEvent = async (req, res) => {
   const { id } = req.params;
 
