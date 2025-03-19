@@ -1,60 +1,79 @@
-// const eventService = require("../services/eventService");
+// controllers/eventController.js
 
-// const getEvents = async (req, res) => {
-//   try {
-//     const events = await eventService.getAllEvents();
-//     res.status(200).json(events);
-//   } catch (error) {
-//     res.status(500).json({ message: "Event err while get" });
-//   }
-// };
+const eventService = require('../services/eventService');
 
-// const createEvent = async (req, res) => {
-//   const { name, date, description, importance } = req.body;
+// Додавання події
+const addEvent = async (req, res) => {
+  const { name, date, description, importance } = req.body;
 
-//   if (!name || !date || !description || !importance) {
-//     return res.status(400).json({ message: "All fields are required" });
-//   }
+  if (!name || !date || !description || !importance) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
 
-//   try {
-//     const event = await eventService.createEvent({ name, date, description, importance });
-//     res.status(201).json(event);
-//   } catch (error) {
-//     res.status(500).json({ message: "Event err while create" });
-//   }
-// };
+  try {
+    const newEvent = await eventService.createEvent({ name, date, description, importance });
+    res.status(201).json(newEvent);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
-// const updateEvent = async (req, res) => {
-//   const { id } = req.params;
-//   const { name, date, description, importance } = req.body;
+// Отримання всіх подій
+const getAllEvents = async (req, res) => {
+  try {
+    const events = await eventService.getEvents();
+    res.status(200).json(events);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
-//   try {
-//     const event = await eventService.updateEvent(id, { name, date, description, importance });
+// Оновлення події
+const updateEvent = async (req, res) => {
+  const { id } = req.params;
+  const { name, date, description, importance } = req.body;
 
-//     if (!event) {
-//       return res.status(404).json({ message: "Event not found" });
-//     }
+  if (!name || !date || !description || !importance) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
 
-//     res.status(200).json(event);
-//   } catch (error) {
-//     res.status(500).json({ message: "Event err while update" });
-//   }
-// };
+  try {
+    const updatedEvent = await eventService.updateEvent(id, { name, date, description, importance });
 
-// const deleteEvent = async (req, res) => {
-//   const { id } = req.params;
+    if (!updatedEvent) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
 
-//   try {
-//     const deletedEvent = await eventService.deleteEvent(id);
+    res.status(200).json(updatedEvent);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
-//     if (!deletedEvent) {
-//       return res.status(404).json({ message: "Event not found" });
-//     }
+// Видалення події
+const deleteEvent = async (req, res) => {
+  const { id } = req.params;
 
-//     res.status(200).json({ message: "Event deleted successfully" });
-//   } catch (error) {
-//     res.status(500).json({ message: "Error while Event Del" });
-//   }
-// };
+  try {
+    const deletedEvent = await eventService.deleteEvent(id);
 
-// module.exports = { getEvents, createEvent, updateEvent, deleteEvent };
+    if (!deletedEvent) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    res.status(200).json({ message: 'Event deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+module.exports = {
+  addEvent,
+  getAllEvents,
+  updateEvent,
+  deleteEvent,
+};
